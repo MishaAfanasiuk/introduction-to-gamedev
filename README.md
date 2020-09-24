@@ -1,1 +1,1 @@
-# introduction-to-gamedev
+# Introduction to game dev labs
