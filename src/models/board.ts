@@ -1,7 +1,7 @@
 import {FieldDiskEnum} from "../enums/field-disk.enum";
 
 export class Board {
-  private readonly field: number[][];
+  readonly field: number[][];
 
   constructor(fieldSize = 8) {
     this.field = [...new Array(fieldSize)].map(() => [...new Array(fieldSize)])
