@@ -17,7 +17,6 @@ export class Board {
   }
 
   makeMove(x: number, y: number, disc: FieldDiskEnum) {
-    console.log(x, y)
     this.field[x][y] = disc;
     const field = this.field;
 
@@ -104,6 +103,10 @@ export class Board {
       {
         name: 'xy',
         data: this.checkXY(field, x, y, disc)
+      },
+      {
+        name: 'xyReverse',
+        data: this.checkXYReverse(field, x, y, disc)
       }
     ];
 
@@ -137,20 +140,12 @@ export class Board {
         field[i][y] = disk;
         break;
       case 'xy':
-        field[x+i][y - i] = disk;
+        field[x+i][y + i] = disk;
         break;
       case 'xyReverse':
         field[x-i][y + i] = disk;
         break;
     }
-  }
-
-  private showAvailableFields () {
-
-  }
-
-  private isMoveCorrect() {
-    return true
   }
 
   private checkX = (field: any, x:number, y:number, disk: FieldDiskEnum) => {
@@ -228,9 +223,9 @@ export class Board {
     let opposite = this.getOppositeDisk(disk);
 
     if (field[x - 1]?.[y - 1] === opposite) {
-      for (let i = x < y ? x : y; i > 0; i--) {
+      for (let i = 1; i < (x < y ? x : y); i++) {
         if (field[x - i][y - i] === disk) {
-          start = i;
+          start = -i;
           break;
         } else if (!field[x - i][y - i]) {
           break
@@ -239,7 +234,7 @@ export class Board {
     }
 
     if (field[x + 1]?.[y + 1] === opposite) {
-      for (let i = 1; i <= (field.length - x > y ? x : y); i++) {
+      for (let i = 1; i <= ((field.length - x) < (field.length - y) ? (field.length - x) : (field.length - y)); i++) {
         if (field[x + i][y + i] === disk) {
           end = i;
           break;
@@ -255,6 +250,52 @@ export class Board {
 
     return {start, end};
   };
+
+  private checkXYReverse = (field: any, x:number, y:number, disk: FieldDiskEnum) => {
+    let start: number = 0;
+    let end: number = 0;
+
+    let opposite = this.getOppositeDisk(disk);
+
+    if (field[x - 1]?.[y + 1] === opposite) {
+      console.log('69+++')
+      console.log(x, field.lenght - y);
+      for (let i = 1; i <= (x < (field.length - y) ? x : (field.length - y)); i++) {
+        console.log(x, field.length - y)
+        if (field[x - i][y + i] === disk) {
+          end = i;
+          break;
+        } else if (!field[x - i][y + i]) {
+          break
+        }
+      }
+    }
+
+    if (field[x + 1]?.[y - 1] === opposite) {
+      for (let i = 1; i <= (field.length - x < y ? field.length - x : y); i++) {
+        if (field[x + i][y - i] === disk) {
+          start = -i;
+          break;
+        } else if (!field[x + i][y - i]) {
+          break
+        }
+      }
+    }
+    console.log(start, end)
+    if (Math.abs(start) <= 1 && Math.abs(end) <= 1) {
+      return false
+    }
+    console.log(start, end);
+    // if (start > end) {
+    //   return { start: end, end: start }
+    // }
+    if (end < 0) {
+      return {start: end, end: start};
+    }
+
+    return {start, end};
+  };
+
 
 
   private getOppositeDisk = (disk: FieldDiskEnum) => {
