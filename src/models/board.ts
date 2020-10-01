@@ -234,7 +234,7 @@ export class Board {
     }
 
     if (field[x + 1]?.[y + 1] === opposite) {
-      for (let i = 1; i <= ((field.length - x) < (field.length - y) ? (field.length - x) : (field.length - y)); i++) {
+      for (let i = 1; i < ((field.length - x) < (field.length - y) ? (field.length - x) : (field.length - y)); i++) {
         if (field[x + i][y + i] === disk) {
           end = i;
           break;

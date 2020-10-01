@@ -14,28 +14,33 @@ export class Robot {
       this.myDiscs.push([4,4], [3,3])
   }
 
-  makeMove() {
-    // return this.name;
-  }
-
   makeDecision() {
-    // return this.name;
+    const possibleMoves : number[][] = this.getPossibleMoves()
+    const moveNumber = Math.floor(Math.random() * Math.floor(possibleMoves.length))
+    return possibleMoves[moveNumber];
   };
 
   getPossibleMoves() {
-    let possibleMoves = [];
+    let possibleMoves: number[][] = [];
     this.myDiscs.forEach((item) => {
       const nearbyBlack = this.getNearbyBlack(item);
       nearbyBlack.forEach((itemBlack) => {
         let a = itemBlack[0] - item[0];
         let b = itemBlack[1] - item[1];
-        if(this.board.field[itemBlack[0] - a][itemBlack[1] - b] === FieldDiskEnum.WHITE){
-          return
-        } else if (!this.board.field[itemBlack[0] - a][itemBlack[1] - b]) {
-          possibleMoves.push([itemBlack[0] - a, itemBlack[1] - b])
+        while ( this.board.field[itemBlack[0] - a][itemBlack[1] - b] !== FieldDiskEnum.WHITE ||
+        itemBlack[0] - a >= -1 ||
+        itemBlack[1] - b >= -1 ||
+        itemBlack[0] - a <= this.board.field.length ||
+        itemBlack[0] - b <= this.board.field.length ) {
+          if (!this.board.field[itemBlack[0] - a][itemBlack[1] - b]) {
+            possibleMoves.push([itemBlack[0] - a, itemBlack[1] - b])
+          }
+          itemBlack[0] -= a;
+          itemBlack[1] -= b;
         }
       })
-    })
+    });
+    return possibleMoves;
   }
   getNearbyBlack([x, y]: number[]) {
     let result = [];
