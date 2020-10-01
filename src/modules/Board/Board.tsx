@@ -22,7 +22,6 @@ export const BoardView = () => {
       parseInt(target.getAttribute('aria-y')),
     );
 
-    console.table(game.getBoard().getField());
     setState([...game.getBoard().getField()])
   };
 
