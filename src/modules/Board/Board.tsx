@@ -1,32 +1,39 @@
 import React, {useState} from 'react';
-import {Board, board} from "../../models/board";
+import { board } from "../../models/board";
 import './Board.scss'
 import {Game} from "../../models/game";
 import {FieldDiskEnum} from "../../enums/field-disk.enum";
-import {Player} from "../../models/player";
-import {GameTypeEnum} from "../../enums/game-type.enum";
 
-// const game = new Game(
-//   [
-//     new Player('Player 1', FieldDiskEnum.BLACK),
-//     new Player('Player 2', FieldDiskEnum.WHITE)
-//   ],
-//   new Board(),
-//   GameTypeEnum.TWO_PLAYERS
-// );
+const clickController = (x: number, y: number, game: Game, setState: Function) => {
+  game.makeMove(x, y);
+
+  setState([...game.getBoard().getField()]);
+
+  const player = game.getCurrentPlayer();
+
+  if (player.getName() === 'Bot') {
+    setTimeout(() => {
+      const [x, y] = player.makeDecision(game.getBoard().getAvailableMoves(player.getDiscColor()));
+      clickController(x, y, game, setState)
+    }, 500)
+  }
+};
+
+const createController = (game: Game, setState: Function) => {
+  return ({ target }: any) => {
+    clickController(
+      parseInt(target.getAttribute('aria-x')),
+      parseInt(target.getAttribute('aria-y')),
+      game,
+      setState
+    )
+  }
+};
 
 export const BoardView = ({ game }: { game: Game }) => {
   const [field, setState]: [number[][], any] = useState(game.getBoard().getField());
 
-  const onCellClick = ({ target }: any) => {
-    game.makeMove(
-      parseInt(target.getAttribute('aria-x')),
-      parseInt(target.getAttribute('aria-y')),
-      setState
-    );
-
-    setState([...game.getBoard().getField()])
-  };
+  const onCellClick = createController(game, setState);
 
   return (
     <div>

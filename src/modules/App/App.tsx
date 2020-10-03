@@ -43,10 +43,9 @@ function App() {
       <div onClick={onPlayWithBot}>
         Play with bot
       </div>
-      {/*<div onClick={onPlayWithPlayer}>*/}
-      {/*  Play with player*/}
-      {/*</div>*/}
-
+      <div onClick={onPlayWithPlayer}>
+        Play with player
+      </div>
       {
         game ? <BoardView game={game} /> : null
       }

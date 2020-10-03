@@ -48,28 +48,12 @@ export class Game {
     })
   }
 
-  private checkAvailableMove = () => {
-
-  }
-
-  makeMove(x:number, y:number, setState: Function) {
+  makeMove(x:number, y:number) {
     const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
 
     if (isMoveSuccess) {
       this.switchPlayer();
-      setState(this.board.getField());
       this.countPlayersScores();
-
-      const player = this.getCurrentPlayer();
-
-      if (player.getName() === 'Bot') {
-        setTimeout(() => {
-
-          const a = player.makeDecision(this.board.getAvailableMoves(player.getDiscColor()));
-
-          this.makeMove(a[0], a[1], setState);
-        }, 500)
-      }
     }
   }
 }

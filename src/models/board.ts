@@ -104,7 +104,7 @@ export class Board {
     let result = [];
     for(let i = -1; i < 2; i++) {
       for(let j = -1; j < 2; j++) {
-        if(this.field[x + i][y + j] === this.getOppositeDisk(diskColor)) {
+        if(this.field?.[x + i]?.[y + j] === this.getOppositeDisk(diskColor)) {
           result.push([x + i, y + j]);
         }
       }
