@@ -23,4 +23,8 @@ export class Player {
   setScore(score: number) {
     this.score = score;
   }
+
+  makeDecision(possibleMoves: number[][]): number[] {
+    return []
+  }
 }

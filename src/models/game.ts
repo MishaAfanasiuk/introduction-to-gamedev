@@ -48,17 +48,11 @@ export class Game {
     })
   }
 
-
-
   private checkAvailableMove = () => {
 
   }
 
   makeMove(x:number, y:number, setState: Function) {
-    // if (this.getCurrentPlayer().getName() === 'Bot') {
-    //   return
-    // }
-    console.log(x, y, this.players[this.currentPlayerIndex].getName(), 'check move')
     const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
 
     if (isMoveSuccess) {
@@ -66,19 +60,14 @@ export class Game {
       setState(this.board.getField());
       this.countPlayersScores();
 
-      // console.log(this.players);
-      console.log(this.getCurrentPlayer().getName());
+      const player = this.getCurrentPlayer();
 
-      if (this.getCurrentPlayer().getName() === 'Bot') {
-        const p: any = this.getCurrentPlayer();
-
+      if (player.getName() === 'Bot') {
         setTimeout(() => {
-          console.log(this.makeMove, ',make move')
 
-          const a = p.makeDecision(this.board.getAvailableMoves(p.getDiscColor()));
+          const a = player.makeDecision(this.board.getAvailableMoves(player.getDiscColor()));
 
           this.makeMove(a[0], a[1], setState);
-          console.log(a, 'decision');
         }, 500)
       }
     }

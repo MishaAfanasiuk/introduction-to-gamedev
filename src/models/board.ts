@@ -205,10 +205,10 @@ export class Board {
 
     if (field[x - 1]?.[y - 1] === opposite) {
       for (let i = 1; i < (x < y ? x : y); i++) {
-        if (field[x - i][y - i] === disk) {
+        if (field[x - i]?.[y - i] === disk) {
           start = -i;
           break;
-        } else if (!field[x - i][y - i]) {
+        } else if (!field[x - i]?.[y - i]) {
           break
         }
       }
@@ -216,10 +216,10 @@ export class Board {
 
     if (field[x + 1]?.[y + 1] === opposite) {
       for (let i = 1; i < ((field.length - x) < (field.length - y) ? (field.length - x) : (field.length - y)); i++) {
-        if (field[x + i][y + i] === disk) {
+        if (field[x + i]?.[y + i] === disk) {
           end = i;
           break;
-        } else if (!field[x + i][y + i]) {
+        } else if (!field[x + i]?.[y + i]) {
           break
         }
       }
@@ -239,14 +239,11 @@ export class Board {
     let opposite = this.getOppositeDisk(disk);
 
     if (field[x - 1]?.[y + 1] === opposite) {
-      console.log('69+++')
-      console.log(x, field.lenght - y);
       for (let i = 1; i <= (x < (field.length - y) ? x : (field.length - y)); i++) {
-        console.log(x, field.length - y)
-        if (field[x - i][y + i] === disk) {
+        if (field[x - i]?.[y + i] === disk) {
           end = i;
           break;
-        } else if (!field[x - i][y + i]) {
+        } else if (!field[x - i]?.[y + i]) {
           break
         }
       }
@@ -254,19 +251,18 @@ export class Board {
 
     if (field[x + 1]?.[y - 1] === opposite) {
       for (let i = 1; i <= (field.length - x < y ? field.length - x : y); i++) {
-        if (field[x + i][y - i] === disk) {
+        if (field[x + i]?.[y - i] === disk) {
           start = -i;
           break;
-        } else if (!field[x + i][y - i]) {
+        } else if (!field[x + i]?.[y - i]) {
           break
         }
       }
     }
-    console.log(start, end)
+
     if (Math.abs(start) <= 1 && Math.abs(end) <= 1) {
       return false
     }
-    console.log(start, end);
 
     if (end < 0) {
       return {start: end, end: start};
