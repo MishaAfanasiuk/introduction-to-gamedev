@@ -33,21 +33,51 @@ export class Game {
     this.currentPlayerIndex = this.currentPlayerIndex === 1 ? 0 : 1;
   }
 
-  makeMove(x:number, y:number) {
-    if (this.getCurrentPlayer().getName() === 'Bot') {
-      return
-    }
+  private countPlayersScores() {
+    const [ player1, player2 ] = this.players;
+    let player1Score: number = 0, player2Score: number = 0;
 
+    this.board.getField().forEach((row) => {
+      row.forEach((field) => {
+        if (field === player1.getDiscColor()) {
+          player1Score += 1;
+        } else if (field === player2.getDiscColor()) {
+          player2Score += 1;
+        }
+      })
+    })
+  }
+
+
+
+  private checkAvailableMove = () => {
+
+  }
+
+  makeMove(x:number, y:number, setState: Function) {
+    // if (this.getCurrentPlayer().getName() === 'Bot') {
+    //   return
+    // }
+    console.log(x, y, this.players[this.currentPlayerIndex].getName(), 'check move')
     const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
+
     if (isMoveSuccess) {
       this.switchPlayer();
-      console.log(this.players);
+      setState(this.board.getField());
+      this.countPlayersScores();
+
+      // console.log(this.players);
       console.log(this.getCurrentPlayer().getName());
 
       if (this.getCurrentPlayer().getName() === 'Bot') {
         const p: any = this.getCurrentPlayer();
+
         setTimeout(() => {
-          const a = p.makeDecision();
+          console.log(this.makeMove, ',make move')
+
+          const a = p.makeDecision(this.board.getAvailableMoves(p.getDiscColor()));
+
+          this.makeMove(a[0], a[1], setState);
           console.log(a, 'decision');
         }, 500)
       }

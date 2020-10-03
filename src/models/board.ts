@@ -20,77 +20,6 @@ export class Board {
     this.field[x][y] = disc;
     const field = this.field;
 
-    // const checks: any = [
-    //   {
-    //     axis: 'x',
-    //     start: null,
-    //     end: null,
-    //     isCorrect: true,
-    //   },
-    //   {
-    //     axis: 'y',
-    //     start: null,
-    //     end: null,
-    //     isCorrect: true,
-    //   },
-    //   {
-    //     axis: 'xy',
-    //     start: null,
-    //     end: null,
-    //     isCorrect: true,
-    //   },
-    //   {
-    //     axis: 'xyReverse',
-    //     start: null,
-    //     end: null,
-    //     isCorrect: true,
-    //   }
-    // ];
-
-    // for (let i = 0; i < field.length; i++) {
-    //   const fields: any = {
-    //     x: field[x][i],
-    //     y: field[i][y],
-    //     xy: field[x + y]?.[y - i],
-    //     xyReverse: field[x - i]?.[y + i],
-    //   };
-    //
-    //   checks.forEach((check: any) => {
-    //     // if ()
-    //
-    //     if (!fields[check.axis] && !check.end && check.start) {
-    //       check.isCorrect = false;
-    //     }
-    //
-    //
-    //     if (fields[check.axis] === disc) {
-    //       if (check.start) {
-    //         check.end = i;
-    //       } else {
-    //         check.start = i;
-    //       }
-    //     }
-    //   });
-    // }
-
-    // let isMoveCorrect = false;
-
-    // const moves = Object.values(checks).filter((check: any) => {
-    //   return check.start && check.end && check.isCorrect
-    // });
-    //
-    // console.log(moves.length);
-    //
-    // if (!moves.length) {
-    //   this.field[x][y] = 0;
-    // }
-    //
-    // moves.forEach((move: any) => {
-    //   for (let i = move.start; i < move.end; i++) {
-    //     this.changeField(field, move.axis, i, x, y, disc)
-    //   }
-    // });
-
     const moves: any = [
       {
         name: 'x',
@@ -129,6 +58,58 @@ export class Board {
     }
 
     return true
+  }
+
+  getAvailableMoves(diskColor: FieldDiskEnum) {
+    let possibleMoves: number[][] = [];
+    let myDiscs = this.getMyDiscs(diskColor);
+    myDiscs.forEach((item) => {
+      const nearbyBlack = this.getNearbyEnemy(item, diskColor);
+      nearbyBlack.forEach((itemBlack) => {
+        let a = itemBlack[0] - item[0];
+        let b = itemBlack[1] - item[1];
+        let x = itemBlack[0];
+        let y = itemBlack[1];
+
+        while ( this.field[x][y] !== diskColor &&
+        x > 0 &&
+        y > 0 &&
+        x < this.field.length - 1 &&
+        y < this.field.length - 1) {
+          x = x + a;
+          y = y + b;
+          if (this.field[x][y] !== this.getOppositeDisk(diskColor)) {
+            possibleMoves.push([x, y]);
+            return
+          }
+        }
+      })
+    });
+    return possibleMoves;
+  };
+
+  private getMyDiscs(diskColor: FieldDiskEnum) {
+    let result: number[][] = [];
+    this.field.forEach((item, row) => {
+      item.forEach((item, column) => {
+        if(item === diskColor) {
+          result.push([row, column]);
+        }
+      })
+    });
+    return result;
+  }
+
+  private getNearbyEnemy([x, y]: number[], diskColor: FieldDiskEnum) {
+    let result = [];
+    for(let i = -1; i < 2; i++) {
+      for(let j = -1; j < 2; j++) {
+        if(this.field[x + i][y + j] === this.getOppositeDisk(diskColor)) {
+          result.push([x + i, y + j]);
+        }
+      }
+    }
+    return result;
   }
 
   private changeField(field: any, axis: string, i: number, x: number, y: number, disk: FieldDiskEnum) {
@@ -293,8 +274,6 @@ export class Board {
 
     return {start, end};
   };
-
-
 
   private getOppositeDisk = (disk: FieldDiskEnum) => {
     return disk === FieldDiskEnum.WHITE ? FieldDiskEnum.BLACK : FieldDiskEnum.WHITE

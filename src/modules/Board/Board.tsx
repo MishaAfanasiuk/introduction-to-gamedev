@@ -22,6 +22,7 @@ export const BoardView = ({ game }: { game: Game }) => {
     game.makeMove(
       parseInt(target.getAttribute('aria-x')),
       parseInt(target.getAttribute('aria-y')),
+      setState
     );
 
     setState([...game.getBoard().getField()])
