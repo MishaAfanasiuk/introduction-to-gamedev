@@ -1,7 +1,7 @@
 import {FieldDiskEnum} from "../enums/field-disk.enum";
 
 export class Player {
-  protected score: number = 0;
+  protected score: number = 2;
 
   constructor(
     private name: string,

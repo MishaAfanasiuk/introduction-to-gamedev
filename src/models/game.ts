@@ -7,6 +7,7 @@ type PlayersType = [Player, Player];
 export class Game {
   private currentPlayerIndex: number = 0;
   private switchPlayerCount = 0;
+  private winner: Player | null = null;
 
   constructor(
     private players: PlayersType,
@@ -18,8 +19,8 @@ export class Game {
     return this.gameType;
   };
 
-  restartGame() {
-    this.board = new Board();
+  getWinner() {
+    return this.winner
   }
 
   getPlayers() {
@@ -35,7 +36,8 @@ export class Game {
   };
 
   private endGame() {
-    console.log('game ended!')
+    const [ player1, player2 ] = this.players;
+    this.winner = player1.getScore() > player2.getScore() ? player1 : player2;
   }
 
   private switchPlayer() {
@@ -73,7 +75,6 @@ export class Game {
 
   makeMove(x:number, y:number) {
     const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
-    let switches = 0;
     if (isMoveSuccess) {
       this.switchPlayer();
       this.countPlayersScores();

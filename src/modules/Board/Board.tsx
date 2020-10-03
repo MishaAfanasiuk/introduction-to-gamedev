@@ -3,6 +3,7 @@ import { board } from "../../models/board";
 import './Board.scss'
 import {Game} from "../../models/game";
 import {FieldDiskEnum} from "../../enums/field-disk.enum";
+import {Player} from "../../models/player";
 
 const clickController = (x: number, y: number, game: Game, setState: Function) => {
   game.makeMove(x, y);
@@ -42,6 +43,20 @@ export const BoardView = ({ game }: { game: Game }) => {
 
   return (
     <div>
+      <div>
+        {
+          game && game.getPlayers().map((player: Player) => {
+            return `${player.getName()} score: ${player.getScore()}`
+          }).join('|')
+        }
+      </div>
+      <div>
+        {
+          game.getWinner() && (
+            <b>Player: {game.getWinner()?.getName()} wins!</b>
+          )
+        }
+      </div>
       <table className={'board'}>
         {
           field.map((row, x) => {
