@@ -71,7 +71,7 @@ export class Board {
         let x = itemBlack[0];
         let y = itemBlack[1];
 
-        while ( this.field[x][y] !== diskColor &&
+        while ( this.field?.[x + a]?.[y + b] !== diskColor &&
         x > 0 &&
         y > 0 &&
         x < this.field.length - 1 &&
