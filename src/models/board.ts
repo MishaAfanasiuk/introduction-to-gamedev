@@ -286,9 +286,7 @@ export class Board {
       return false
     }
     console.log(start, end);
-    // if (start > end) {
-    //   return { start: end, end: start }
-    // }
+
     if (end < 0) {
       return {start: end, end: start};
     }

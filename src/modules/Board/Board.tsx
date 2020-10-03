@@ -4,16 +4,18 @@ import './Board.scss'
 import {Game} from "../../models/game";
 import {FieldDiskEnum} from "../../enums/field-disk.enum";
 import {Player} from "../../models/player";
+import {GameTypeEnum} from "../../enums/game-type.enum";
 
-const game = new Game(
-  [
-    new Player('Player 1', FieldDiskEnum.BLACK),
-    new Player('Player 2', FieldDiskEnum.WHITE)
-  ],
-  new Board()
-);
+// const game = new Game(
+//   [
+//     new Player('Player 1', FieldDiskEnum.BLACK),
+//     new Player('Player 2', FieldDiskEnum.WHITE)
+//   ],
+//   new Board(),
+//   GameTypeEnum.TWO_PLAYERS
+// );
 
-export const BoardView = () => {
+export const BoardView = ({ game }: { game: Game }) => {
   const [field, setState]: [number[][], any] = useState(game.getBoard().getField());
 
   const onCellClick = ({ target }: any) => {

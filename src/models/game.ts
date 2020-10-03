@@ -1,15 +1,16 @@
 import {Player} from "./player";
 import {Board} from "./board";
+import {GameTypeEnum} from "../enums/game-type.enum";
 
 type PlayersType = [Player, Player];
 
 export class Game {
-  // private players: PlayersType;
   private currentPlayerIndex: number = 0;
 
   constructor(
     private players: PlayersType,
     private board: Board,
+    private type: GameTypeEnum,
   ) {}
 
   startGame(players: PlayersType) {
@@ -33,9 +34,23 @@ export class Game {
   }
 
   makeMove(x:number, y:number) {
+    if (this.getCurrentPlayer().getName() === 'Bot') {
+      return
+    }
+
     const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
     if (isMoveSuccess) {
       this.switchPlayer();
+      console.log(this.players);
+      console.log(this.getCurrentPlayer().getName());
+
+      if (this.getCurrentPlayer().getName() === 'Bot') {
+        const p: any = this.getCurrentPlayer();
+        setTimeout(() => {
+          const a = p.makeDecision();
+          console.log(a, 'decision');
+        }, 500)
+      }
     }
   }
 }

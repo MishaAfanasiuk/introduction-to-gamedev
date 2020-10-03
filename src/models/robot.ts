@@ -1,16 +1,14 @@
 import {FieldDiskEnum} from "../enums/field-disk.enum";
 import {Board} from "./board";
+import {Player} from "./player";
 
-export class Robot {
-  private score: number = 0;
+export class Robot extends Player {
   private myDiscs: number[][] = [];
-  private discColor: FieldDiskEnum = FieldDiskEnum.WHITE;
 
   constructor(
-    private name: string,
     private board: Board,
-
   ) {
+      super('Bot',  FieldDiskEnum.WHITE);
       this.myDiscs.push([4,4], [3,3])
   }
 
@@ -42,6 +40,7 @@ export class Robot {
     });
     return possibleMoves;
   }
+
   getNearbyBlack([x, y]: number[]) {
     let result = [];
     for(let i = -1; i < 2; i++) {
