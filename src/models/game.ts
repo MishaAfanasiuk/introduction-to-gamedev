@@ -6,15 +6,20 @@ type PlayersType = [Player, Player];
 
 export class Game {
   private currentPlayerIndex: number = 0;
+  private switchPlayerCount = 0;
 
   constructor(
     private players: PlayersType,
     private board: Board,
-    private type: GameTypeEnum,
+    private gameType: GameTypeEnum,
   ) {}
 
-  startGame(players: PlayersType) {
-    this.players = players;
+  getGameType = () => {
+    return this.gameType;
+  };
+
+  restartGame() {
+    this.board = new Board();
   }
 
   getPlayers() {
@@ -29,8 +34,23 @@ export class Game {
     return this.players[this.currentPlayerIndex];
   };
 
+  private endGame() {
+    console.log('game ended!')
+  }
+
   private switchPlayer() {
+    this.switchPlayerCount += 1;
+    if (this.switchPlayerCount >= 2) {
+      this.endGame();
+    }
+
     this.currentPlayerIndex = this.currentPlayerIndex === 1 ? 0 : 1;
+
+    if (!this.getBoard().getAvailableMoves(this.getCurrentPlayer().getDiscColor()).length) {
+      this.switchPlayer();
+    } else {
+      this.switchPlayerCount = 0;
+    }
   }
 
   private countPlayersScores() {
@@ -45,12 +65,15 @@ export class Game {
           player2Score += 1;
         }
       })
-    })
+    });
+
+    player1.setScore(player1Score);
+    player2.setScore(player2Score);
   }
 
   makeMove(x:number, y:number) {
     const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
-    let switches
+    let switches = 0;
     if (isMoveSuccess) {
       this.switchPlayer();
       this.countPlayersScores();

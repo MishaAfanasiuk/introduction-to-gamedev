@@ -5,7 +5,6 @@ import {Player} from "./player";
 export class Robot extends Player {
 
   constructor(
-    private board: Board,
   ) {
     super('Bot',  FieldDiskEnum.WHITE);
   }
