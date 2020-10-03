@@ -50,7 +50,7 @@ export class Game {
 
   makeMove(x:number, y:number) {
     const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
-
+    let switches
     if (isMoveSuccess) {
       this.switchPlayer();
       this.countPlayersScores();

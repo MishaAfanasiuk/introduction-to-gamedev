@@ -12,6 +12,7 @@ function App() {
   const [game, setGame]: [Game | null, Function] = useState(null);
 
   const onPlayWithBot = () => {
+    console.log('new game')
     const board = new Board();
     setGame(
       new Game(

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { board } from "../../models/board";
 import './Board.scss'
 import {Game} from "../../models/game";
@@ -34,6 +34,11 @@ export const BoardView = ({ game }: { game: Game }) => {
   const [field, setState]: [number[][], any] = useState(game.getBoard().getField());
 
   const onCellClick = createController(game, setState);
+
+  useEffect(() => {
+    setState(game.getBoard().getField())
+  }, [game]);
+
 
   return (
     <div>
