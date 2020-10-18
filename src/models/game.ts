@@ -8,12 +8,21 @@ export class Game {
   private currentPlayerIndex: number = 0;
   private switchPlayerCount = 0;
   private winner: Player | null = null;
+  private moveLocked = false;
 
   constructor(
     private players: PlayersType,
     private board: Board,
     private gameType: GameTypeEnum,
   ) {}
+
+  isMoveLocked = () => {
+    return this.moveLocked
+  };
+
+  toggleMoveLock = () => {
+    this.moveLocked = !this.moveLocked;
+  };
 
   getGameType = () => {
     return this.gameType;
@@ -41,12 +50,12 @@ export class Game {
   }
 
   private switchPlayer() {
-    this.switchPlayerCount += 1;
-    if (this.switchPlayerCount >= 2) {
-      this.endGame();
-    }
-
     this.currentPlayerIndex = this.currentPlayerIndex === 1 ? 0 : 1;
+    this.switchPlayerCount += 1;
+
+    if (this.switchPlayerCount >= 2) {
+      return this.endGame();
+    }
 
     if (!this.getBoard().getAvailableMoves(this.getCurrentPlayer().getDiscColor()).length) {
       this.switchPlayer();

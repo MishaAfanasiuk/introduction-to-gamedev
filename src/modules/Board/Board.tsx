@@ -6,6 +6,9 @@ import {FieldDiskEnum} from "../../enums/field-disk.enum";
 import {Player} from "../../models/player";
 
 const clickController = (x: number, y: number, game: Game, setState: Function) => {
+  if (game.isMoveLocked()) {
+    return
+  }
   game.makeMove(x, y);
 
   setState([...game.getBoard().getField()]);
@@ -13,8 +16,10 @@ const clickController = (x: number, y: number, game: Game, setState: Function) =
   const player = game.getCurrentPlayer();
 
   if (player.getName() === 'Bot') {
+    game.toggleMoveLock();
     setTimeout(() => {
-      const [x, y] = player.makeDecision(game.getBoard().getAvailableMoves(player.getDiscColor()));
+      const [x, y] = player?.makeDecision(game.getBoard().getAvailableMoves(player.getDiscColor())) || [];
+      game.toggleMoveLock();
       clickController(x, y, game, setState)
     }, 500)
   }
