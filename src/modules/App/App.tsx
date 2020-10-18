@@ -12,15 +12,14 @@ function App() {
   const [game, setGame]: [Game | any, Function] = useState(null);
 
   const createGame = (gameType: GameTypeEnum) => {
-    let board = new Board();
     const games = {
       [GameTypeEnum.PLAYER_WITH_BOT]: (
         new Game(
           [
             new Player('Player 1', FieldDiskEnum.BLACK),
-            new Robot(board),
+            new Robot(),
           ],
-          board,
+          new Board(),
           GameTypeEnum.PLAYER_WITH_BOT
         )
       ),
@@ -35,7 +34,6 @@ function App() {
         )
       )
     };
-
     return games[gameType]
   };
 

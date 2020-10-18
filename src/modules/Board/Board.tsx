@@ -14,7 +14,7 @@ const clickController = (x: number, y: number, game: Game, setState: Function) =
 
   if (player.getName() === 'Bot') {
     setTimeout(() => {
-      const [x, y] = player.makeDecision(game.getBoard().getAvailableMoves(player.getDiscColor()));
+      const [x, y] = player.makeDecision(game.makeSmartDecision(player));
       clickController(x, y, game, setState)
     }, 500)
   }

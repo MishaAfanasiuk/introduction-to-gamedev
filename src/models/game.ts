@@ -1,6 +1,14 @@
 import {Player} from "./player";
 import {Board} from "./board";
 import {GameTypeEnum} from "../enums/game-type.enum";
+import {Robot} from "./robot";
+import {FieldDiskEnum} from "../enums/field-disk.enum";
+
+type moc = {
+  color: FieldDiskEnum,
+  score: number,
+  won: boolean,
+}
 
 type PlayersType = [Player, Player];
 
@@ -38,6 +46,17 @@ export class Game {
   private endGame() {
     const [ player1, player2 ] = this.players;
     this.winner = player1.getScore() > player2.getScore() ? player1 : player2;
+    // this.winner.gainResult(true);
+    // if (player1.getScore() > player2.getScore()) {
+    //   this.winner = player1;
+    //   player1.gainResult(true);
+    //   player2.gainResult(false);
+    // } else {
+    //   this.winner = player2;
+    //   player2.gainResult(true);
+    //   player1.gainResult(false);
+    // }
+
   }
 
   private switchPlayer() {
@@ -79,5 +98,87 @@ export class Game {
       this.switchPlayer();
       this.countPlayersScores();
     }
+  }
+
+  makeSmartDecision(bot: Robot) {
+    let opponent = this.players[0].getName() === 'Bot' ? this.players[1] : this.players[0],
+      moveNumber = 0,
+      bestScore = 0,
+      boardCopy = new Board(),
+      possibleMoves = this.board.getAvailableMoves(bot.getDiscColor()),
+      cycleRepeat = 0;
+    boardCopy.field = this.board.field.map(x => x.slice());
+    let robot = {score: bot.getScore(), color: bot.getDiscColor(), won: false};
+    let enemy = {score: opponent.getScore(), color: opponent.getDiscColor(), won: false};
+
+    possibleMoves.forEach((move, index) => {
+      boardCopy.makeMove(move[0], move[1], bot.getDiscColor());
+      console.log(move);
+      let score = this.minimax(boardCopy, 0, true, robot, enemy, cycleRepeat);
+      if( score > bestScore ) {
+        moveNumber = index;
+        bestScore = score;
+      }
+      boardCopy.field = this.board.field.map(x => x.slice());
+    });
+
+    // const moveNumber = Math.floor(Math.random() * Math.floor(possibleMoves.length));
+    return possibleMoves[moveNumber];
+  };
+
+  minimax(board : Board, depth : number, robot_turn : boolean, bot: moc, opponent: moc, cycleRepeat: number) : number{
+    let bestScore: number;
+    // console.log(cycleRepeat);
+    if (depth > 100) {
+      return 0
+    }
+    if (cycleRepeat >1) {
+      bot.score > opponent.score ? bot.won = true : opponent.won = true;
+    }
+
+    if (bot.won) {
+      return  1000
+    } else if (opponent.won) {
+      return -1000
+    }
+
+    if(robot_turn) {
+      bestScore = 0;
+      if (board.getAvailableMoves(bot.color).length > 0) {
+        cycleRepeat = 0;
+        let boardCopy = new Board();
+        boardCopy.field = board.field.map(x => x.slice());
+        board.getAvailableMoves(bot.color).forEach((move) => {
+          boardCopy.makeMove(move[0], move[1], bot.color);
+          let score = this.minimax(boardCopy, depth + 1, false, bot, opponent, cycleRepeat);
+          if( score > bestScore ) {
+            bestScore = score;
+          }
+          boardCopy.field = board.field.map(x => x.slice());
+        });
+      } else {
+        cycleRepeat += 1
+      }
+
+    } else {
+      bestScore = 100;
+      if ( board.getAvailableMoves(opponent.color).length > 0 ) {
+        cycleRepeat = 0;
+        let boardCopy = new Board();
+        boardCopy.field = board.field.map(x => x.slice());
+        board.getAvailableMoves(opponent.color).forEach((move) => {
+          boardCopy.makeMove(move[0], move[1], opponent.color);
+          let score = this.minimax(boardCopy, depth + 1, true, bot, opponent, cycleRepeat);
+          if( score < bestScore ) {
+            bestScore = score;
+          }
+          boardCopy.field = board.field.map(x => x.slice());
+        });
+      } else {
+        cycleRepeat += 1
+      }
+    }
+
+    return bestScore;
   }
 }

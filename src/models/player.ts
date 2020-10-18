@@ -2,6 +2,7 @@ import {FieldDiskEnum} from "../enums/field-disk.enum";
 
 export class Player {
   protected score: number = 2;
+  protected status: string = 'playing';
 
   constructor(
     private name: string,
@@ -24,7 +25,7 @@ export class Player {
     this.score = score;
   }
 
-  makeDecision(possibleMoves: number[][]): number[] {
+  makeDecision(move: number[]): number[] {
     return []
   }
 }
