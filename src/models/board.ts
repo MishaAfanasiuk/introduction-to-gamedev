@@ -3,7 +3,10 @@ import {FieldDiskEnum} from "../enums/field-disk.enum";
 export class Board {
   readonly field: number[][];
 
-  constructor(fieldSize = 8) {
+  constructor(
+    private blackHole: number[],
+    fieldSize = 8
+  ) {
     this.field = [...new Array(fieldSize)].map(() => [...new Array(fieldSize)])
     this.field[4][3] = FieldDiskEnum.BLACK;
     this.field[3][4] = FieldDiskEnum.BLACK;
@@ -39,12 +42,12 @@ export class Board {
       }
     ];
 
-    const correctMoves = moves.reduce((acc: any, { data, name }: any) => {
+    const correctMoves = moves.reduce((acc: any, {data, name}: any) => {
       if (!data) {
         return acc
       }
 
-      for (let i = data.start; i < data.end; i++ ) {
+      for (let i = data.start; i < data.end; i++) {
         this.changeField(this.field, name, i, x, y, disc)
       }
 
@@ -57,7 +60,7 @@ export class Board {
       return false
     }
 
-    return true
+    return [x, y]
   }
 
   getAvailableMoves(diskColor: FieldDiskEnum) {
@@ -71,14 +74,17 @@ export class Board {
         let x = itemBlack[0];
         let y = itemBlack[1];
 
-        while ( this.field?.[x + a]?.[y + b] !== diskColor &&
+        while (this.field?.[x + a]?.[y + b] !== diskColor &&
         x > 0 &&
         y > 0 &&
         x < this.field.length - 1 &&
         y < this.field.length - 1) {
           x = x + a;
           y = y + b;
-          if (this.field[x][y] !== this.getOppositeDisk(diskColor)) {
+          if (
+            this.field[x][y] !== this.getOppositeDisk(diskColor) &&
+            !(x === this.blackHole[0] && y === this.blackHole[1])
+          ) {
             possibleMoves.push([x, y]);
             return
           }
@@ -92,7 +98,7 @@ export class Board {
     let result: number[][] = [];
     this.field.forEach((item, row) => {
       item.forEach((item, column) => {
-        if(item === diskColor) {
+        if (item === diskColor) {
           result.push([row, column]);
         }
       })
@@ -102,9 +108,9 @@ export class Board {
 
   private getNearbyEnemy([x, y]: number[], diskColor: FieldDiskEnum) {
     let result = [];
-    for(let i = -1; i < 2; i++) {
-      for(let j = -1; j < 2; j++) {
-        if(this.field?.[x + i]?.[y + j] === this.getOppositeDisk(diskColor)) {
+    for (let i = -1; i < 2; i++) {
+      for (let j = -1; j < 2; j++) {
+        if (this.field?.[x + i]?.[y + j] === this.getOppositeDisk(diskColor)) {
           result.push([x + i, y + j]);
         }
       }
@@ -121,15 +127,15 @@ export class Board {
         field[i][y] = disk;
         break;
       case 'xy':
-        field[x+i][y + i] = disk;
+        field[x + i][y + i] = disk;
         break;
       case 'xyReverse':
-        field[x-i][y + i] = disk;
+        field[x - i][y + i] = disk;
         break;
     }
   }
 
-  private checkX = (field: any, x:number, y:number, disk: FieldDiskEnum) => {
+  private checkX = (field: any, x: number, y: number, disk: FieldDiskEnum) => {
     let start: number = y;
     let end: number = y;
     let opposite = this.getOppositeDisk(disk);
@@ -163,7 +169,7 @@ export class Board {
     return {start, end};
   };
 
-  private checkY = (field: any, x:number, y:number, disk: FieldDiskEnum) => {
+  private checkY = (field: any, x: number, y: number, disk: FieldDiskEnum) => {
     let start: number = x;
     let end: number = x;
     let opposite = this.getOppositeDisk(disk);
@@ -197,7 +203,7 @@ export class Board {
     return {start, end};
   };
 
-  private checkXY = (field: any, x:number, y:number, disk: FieldDiskEnum) => {
+  private checkXY = (field: any, x: number, y: number, disk: FieldDiskEnum) => {
     let start: number = 0;
     let end: number = 0;
 
@@ -232,7 +238,7 @@ export class Board {
     return {start, end};
   };
 
-  private checkXYReverse = (field: any, x:number, y:number, disk: FieldDiskEnum) => {
+  private checkXYReverse = (field: any, x: number, y: number, disk: FieldDiskEnum) => {
     let start: number = 0;
     let end: number = 0;
 
@@ -275,5 +281,3 @@ export class Board {
     return disk === FieldDiskEnum.WHITE ? FieldDiskEnum.BLACK : FieldDiskEnum.WHITE
   }
 }
-
-export const board = new Board();

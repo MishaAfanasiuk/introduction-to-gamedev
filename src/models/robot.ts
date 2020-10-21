@@ -5,8 +5,9 @@ import {Player} from "./player";
 export class Robot extends Player {
 
   constructor(
+    diskColor: FieldDiskEnum,
   ) {
-    super('Bot',  FieldDiskEnum.WHITE);
+    super('Bot',  diskColor);
   }
 
   makeDecision(possibleMoves: number[][]) {

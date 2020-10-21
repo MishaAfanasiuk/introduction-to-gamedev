@@ -5,7 +5,6 @@ import {GameTypeEnum} from "../enums/game-type.enum";
 type PlayersType = [Player, Player];
 
 export class Game {
-  private currentPlayerIndex: number = 0;
   private switchPlayerCount = 0;
   private winner: Player | null = null;
   private moveLocked = false;
@@ -14,6 +13,7 @@ export class Game {
     private players: PlayersType,
     private board: Board,
     private gameType: GameTypeEnum,
+    private currentPlayerIndex: number = 0,
   ) {}
 
   isMoveLocked = () => {
@@ -45,7 +45,7 @@ export class Game {
   };
 
   private endGame() {
-    const [ player1, player2 ] = this.players;
+    const [player1, player2] = this.players;
     this.winner = player1.getScore() > player2.getScore() ? player1 : player2;
   }
 
@@ -65,7 +65,7 @@ export class Game {
   }
 
   private countPlayersScores() {
-    const [ player1, player2 ] = this.players;
+    const [player1, player2] = this.players;
     let player1Score: number = 0, player2Score: number = 0;
 
     this.board.getField().forEach((row) => {
@@ -82,11 +82,13 @@ export class Game {
     player2.setScore(player2Score);
   }
 
-  makeMove(x:number, y:number) {
-    const isMoveSuccess = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
-    if (isMoveSuccess) {
+  makeMove(x: number, y: number): number[] | string | boolean {
+    const move = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
+    if (move) {
       this.switchPlayer();
       this.countPlayersScores();
     }
+
+    return move
   }
 }
