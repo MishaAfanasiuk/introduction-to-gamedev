@@ -126,11 +126,14 @@ export class Game {
     return possibleMoves[moveNumber];
   };
 
-  minimax(board : Board, depth : number, robot_turn : boolean, bot: moc, opponent: moc, cycleRepeat: number) : number{
+  minimax(board : Board, depth : number, robot_turn : boolean, bot: moc, opponent: moc, cycleRepeat: number) {
+
+    console.log('im in');
     let bestScore: number;
     // console.log(cycleRepeat);
     if (depth > 100) {
-      return 0
+      console.log('out');
+      return 0;
     }
     if (cycleRepeat >1) {
       bot.score > opponent.score ? bot.won = true : opponent.won = true;
@@ -144,12 +147,13 @@ export class Game {
 
     if(robot_turn) {
       bestScore = 0;
+      let boardCopy = new Board();
+      boardCopy.field = board.field.map(x => x.slice());
       if (board.getAvailableMoves(bot.color).length > 0) {
         cycleRepeat = 0;
-        let boardCopy = new Board();
-        boardCopy.field = board.field.map(x => x.slice());
         board.getAvailableMoves(bot.color).forEach((move) => {
           boardCopy.makeMove(move[0], move[1], bot.color);
+          console.log('a');
           let score = this.minimax(boardCopy, depth + 1, false, bot, opponent, cycleRepeat);
           if( score > bestScore ) {
             bestScore = score;
@@ -157,18 +161,25 @@ export class Game {
           boardCopy.field = board.field.map(x => x.slice());
         });
       } else {
-        cycleRepeat += 1
+        cycleRepeat += 1;
+        console.log('boom')
+        let score = this.minimax(boardCopy, depth + 1, false, bot, opponent, cycleRepeat);
+        if( score > bestScore ) {
+          bestScore = score;
+        }
       }
 
     } else {
       bestScore = 100;
+      let boardCopy = new Board();
+      boardCopy.field = board.field.map(x => x.slice());
       if ( board.getAvailableMoves(opponent.color).length > 0 ) {
         cycleRepeat = 0;
-        let boardCopy = new Board();
-        boardCopy.field = board.field.map(x => x.slice());
         board.getAvailableMoves(opponent.color).forEach((move) => {
           boardCopy.makeMove(move[0], move[1], opponent.color);
+          console.log('b');
           let score = this.minimax(boardCopy, depth + 1, true, bot, opponent, cycleRepeat);
+          // let score = 1;
           if( score < bestScore ) {
             bestScore = score;
           }
@@ -176,6 +187,11 @@ export class Game {
         });
       } else {
         cycleRepeat += 1
+        console.log('baam');
+        let score = this.minimax(boardCopy, depth + 1, true, bot, opponent, cycleRepeat);
+        if( score < bestScore ) {
+          bestScore = score;
+        }
       }
     }
 
