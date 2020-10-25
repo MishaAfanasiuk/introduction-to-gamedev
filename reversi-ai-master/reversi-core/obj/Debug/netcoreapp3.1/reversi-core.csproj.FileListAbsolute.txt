@@ -1,0 +1,9 @@
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/bin/Debug/netcoreapp3.1/reversi-core.deps.json
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/bin/Debug/netcoreapp3.1/reversi-core.dll
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/bin/Debug/netcoreapp3.1/reversi-core.pdb
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/obj/Debug/netcoreapp3.1/reversi-core.csprojAssemblyReference.cache
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/obj/Debug/netcoreapp3.1/reversi-core.AssemblyInfoInputs.cache
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/obj/Debug/netcoreapp3.1/reversi-core.AssemblyInfo.cs
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/obj/Debug/netcoreapp3.1/reversi-core.csproj.CoreCompileInputs.cache
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/obj/Debug/netcoreapp3.1/reversi-core.dll
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-core/obj/Debug/netcoreapp3.1/reversi-core.pdb

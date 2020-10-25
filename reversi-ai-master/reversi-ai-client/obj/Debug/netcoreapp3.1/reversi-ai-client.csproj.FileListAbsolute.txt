@@ -1,0 +1,15 @@
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/bin/Debug/netcoreapp3.1/reversi-ai-client.deps.json
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/bin/Debug/netcoreapp3.1/reversi-ai-client.runtimeconfig.json
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/bin/Debug/netcoreapp3.1/reversi-ai-client.runtimeconfig.dev.json
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/bin/Debug/netcoreapp3.1/reversi-ai-client.dll
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/bin/Debug/netcoreapp3.1/reversi-ai-client.pdb
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/bin/Debug/netcoreapp3.1/reversi-core.dll
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/bin/Debug/netcoreapp3.1/reversi-core.pdb
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.csprojAssemblyReference.cache
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.AssemblyInfoInputs.cache
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.AssemblyInfo.cs
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.csproj.CoreCompileInputs.cache
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.csproj.CopyComplete
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.dll
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.pdb
+/Users/oleksandradeliieva/WebstormProjects/introduction-to-gamedev/reversi-ai-master/reversi-ai-client/obj/Debug/netcoreapp3.1/reversi-ai-client.genruntimeconfig.cache
