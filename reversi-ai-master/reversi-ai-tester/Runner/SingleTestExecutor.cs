@@ -172,7 +172,7 @@
 
         private ValueOrError<string> FetchNextCommand(StreamReader sr)
         {
-            var delayTask = Task.Delay(TimeSpan.FromSeconds(15));
+            var delayTask = Task.Delay(TimeSpan.FromSeconds(10));
             string nextCommand = null;
             while (IsNullOrComment(nextCommand) && !delayTask.IsCompleted)
             {

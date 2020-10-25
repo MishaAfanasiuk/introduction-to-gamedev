@@ -91,7 +91,7 @@ export class Game {
     this.passCount = 0;
 
     const move = this.board.makeMove(position, this.players[this.currentPlayerIndex].getDiscColor());
-    console.log(move);
+    // console.log(move);
 
     if (move) {
       this.switchPlayer();
@@ -124,23 +124,27 @@ export class Game {
       possibleMovesFinder = new PossibleMovesFinder(),
       possibleMoves = possibleMovesFinder
       .getPossibleMoves(
-        boardCopy,
-        boardCopy.getBlackHole(),
+        this.board,
+        this.board.getBlackHole(),
         bot.getDiscColor()
       ),
       cycleRepeat = 0;
+    // console.log(JSON.stringify(possibleMoves))
     boardCopy.field = this.board.field.map(x => x.slice());
     let robot = {score: bot.getScore(), color: bot.getDiscColor(), won: false};
     let enemy = {score: opponent.getScore(), color: opponent.getDiscColor(), won: false};
 
     possibleMoves.forEach((move, index) => {
       boardCopy.makeMove(move, robot.color);
-      // console.log('a');
-      let scores = this.countPlayersScoresMM(boardCopy, bot, opponent);
-      robot.score = scores[1];
-      enemy.score = scores[0];
-      let score = this.minimax(boardCopy, 0, false, robot, enemy, cycleRepeat);
-      if( score > bestScore ) {
+      let field = this.board.field.map(x => x.slice());
+      console.log(JSON.stringify(field));
+      // console.log(move);
+      // let scores = this.countPlayersScoresMM(boardCopy, bot, opponent);
+      // robot.score = scores[1];
+      // enemy.score = scores[0];
+      let score = 0//this.minimax(boardCopy, 0, false, robot, enemy, cycleRepeat);
+
+      if( score < bestScore ) {
         moveNumber = index;
         bestScore = score;
       }
@@ -158,7 +162,7 @@ export class Game {
 
     if (cycleRepeat >1 || depth > 1) {
       // bot.score > opponent.score ? bot.won = true : opponent.won = true;
-      // console.log('bot.won ' + bot.won)
+      // console.log('bot.won ' )
       if (bot.score > opponent.score) {
         // console.log('boooooooooot');
         return  -1000
@@ -189,7 +193,6 @@ export class Game {
           // console.log(moves);
           // console.log(move);
           boardCopy.makeMove(move, bot.color);
-          // console.log('a');
           let scores = this.countPlayersScoresMM(boardCopy, bot, opponent);
           bot.score = scores[1];
           opponent.score = scores[0];
@@ -237,6 +240,7 @@ export class Game {
             bestScore = score;
           }
           boardCopy.field = board.field.map(x => x.slice());
+          // console.log('a');
         });
       } else {
         cycleRepeat += 1;

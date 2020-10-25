@@ -56,6 +56,7 @@ export class Board {
 
     if (!streaks.length) {
       this.field[x][y].removeColor();
+      // console.log(JSON.stringify(this.field)+JSON.stringify(position));
       return
     }
 

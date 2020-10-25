@@ -53,7 +53,7 @@ export class TesterGame {
         //     )
         // );
 
-      console.log(move);
+      // console.log(move);
 
       if (!move) {
         console.log('pass')
