@@ -53,12 +53,13 @@ export class TesterGame {
         //     )
         // );
 
+      console.log(move);
+
       if (!move) {
         console.log('pass')
       }
 
       const cell = game.makeMove(move);
-
       if (cell) {
         console.log(cell.positionToString())
       }

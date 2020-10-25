@@ -75,6 +75,8 @@ export class Game {
 
   makeMove(position: Position): Cell| null {
     if (!position) {
+
+      // console.log('cell');
       this.passCount++;
 
       this.switchPlayer();
@@ -89,6 +91,7 @@ export class Game {
     this.passCount = 0;
 
     const move = this.board.makeMove(position, this.players[this.currentPlayerIndex].getDiscColor());
+    console.log(move);
 
     if (move) {
       this.switchPlayer();
@@ -112,7 +115,7 @@ export class Game {
 
     return [player1Score, player2Score]
   }
-  makeSmartDecision(bot: Robot) {
+  makeSmartDecision(bot: Robot) : Position{
     let opponent = this.players[0].getName() === 'Bot' ? this.players[1] : this.players[0],
       moveNumber = 0,
       bestScore = 0,
@@ -136,14 +139,13 @@ export class Game {
       let scores = this.countPlayersScoresMM(boardCopy, bot, opponent);
       robot.score = scores[1];
       enemy.score = scores[0];
-      let score = this.minimax(boardCopy, 0, true, robot, enemy, cycleRepeat);
+      let score = this.minimax(boardCopy, 0, false, robot, enemy, cycleRepeat);
       if( score > bestScore ) {
         moveNumber = index;
         bestScore = score;
       }
       boardCopy.field = this.board.field.map(x => x.slice());
     });
-
     // const moveNumber = Math.floor(Math.random() * Math.floor(possibleMoves.length));
     return possibleMoves[moveNumber];
   };
