@@ -25,11 +25,13 @@ export class TesterGame {
 
   private handleExecutionErrors = (e) => {
     console.log(e);
+    this.readLineInterface.removeAllListeners();
     process.exit(0);
   };
 
   private setExitTimeOut = () => {
     return setTimeout(() => {
+      this.readLineInterface.removeAllListeners();
       process.exit(0)
     }, 3000)
   };
