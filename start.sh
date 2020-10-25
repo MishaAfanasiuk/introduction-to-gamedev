@@ -1,2 +1,2 @@
 #!/bin/bash
-ts-node ./src/index.ts
+ts-node ./src/games/testerGame.ts

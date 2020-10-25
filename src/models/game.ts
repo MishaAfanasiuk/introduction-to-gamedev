@@ -1,13 +1,14 @@
 import {Player} from "./player";
 import {Board} from "./board";
 import {GameTypeEnum} from "../enums/game-type.enum";
+import {Position} from "./position";
+import {Cell} from "./cell";
 
 type PlayersType = [Player, Player];
 
 export class Game {
-  private switchPlayerCount = 0;
   private winner: Player | null = null;
-  private moveLocked = false;
+  passCount = 0;
 
   constructor(
     private players: PlayersType,
@@ -15,14 +16,6 @@ export class Game {
     private gameType: GameTypeEnum,
     private currentPlayerIndex: number = 0,
   ) {}
-
-  isMoveLocked = () => {
-    return this.moveLocked
-  };
-
-  toggleMoveLock = () => {
-    this.moveLocked = !this.moveLocked;
-  };
 
   getGameType = () => {
     return this.gameType;
@@ -51,17 +44,6 @@ export class Game {
 
   private switchPlayer() {
     this.currentPlayerIndex = this.currentPlayerIndex === 1 ? 0 : 1;
-    this.switchPlayerCount += 1;
-
-    if (this.switchPlayerCount >= 2) {
-      return this.endGame();
-    }
-
-    if (!this.getBoard().getAvailableMoves(this.getCurrentPlayer().getDiscColor()).length) {
-      this.switchPlayer();
-    } else {
-      this.switchPlayerCount = 0;
-    }
   }
 
   private countPlayersScores() {
@@ -70,9 +52,9 @@ export class Game {
 
     this.board.getField().forEach((row) => {
       row.forEach((field) => {
-        if (field === player1.getDiscColor()) {
+        if (field.color === player1.getDiscColor()) {
           player1Score += 1;
-        } else if (field === player2.getDiscColor()) {
+        } else if (field.color === player2.getDiscColor()) {
           player2Score += 1;
         }
       })
@@ -82,13 +64,28 @@ export class Game {
     player2.setScore(player2Score);
   }
 
-  makeMove(x: number, y: number): number[] | string | boolean {
-    const move = this.board.makeMove(x, y, this.players[this.currentPlayerIndex].getDiscColor());
+  makeMove(position: Position): Cell| null {
+    if (!position) {
+      this.passCount++;
+
+      this.switchPlayer();
+
+      if (this.passCount >= 2) {
+        this.winner = this.getCurrentPlayer();
+      }
+
+      return null
+    }
+
+    this.passCount = 0;
+
+    const move = this.board.makeMove(position, this.players[this.currentPlayerIndex].getDiscColor());
+
     if (move) {
       this.switchPlayer();
       this.countPlayersScores();
     }
 
-    return move
+    return move && this.board.getCell(move)
   }
 }

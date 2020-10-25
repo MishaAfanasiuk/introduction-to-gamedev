@@ -1,11 +1,12 @@
-import {FieldDiskEnum} from "../enums/field-disk.enum";
+import {ColorsEnum} from "../enums/colors.enum";
+import {Position} from "./position";
 
 export class Player {
   protected score: number = 2;
 
   constructor(
     private name: string,
-    private discColor: FieldDiskEnum,
+    private discColor: ColorsEnum,
   ) {}
 
   getName() {
@@ -24,7 +25,7 @@ export class Player {
     this.score = score;
   }
 
-  makeDecision(possibleMoves: number[][]): number[] {
-    return []
+  makeDecision(possibleMoves: Position[]): Position {
+    return
   }
 }

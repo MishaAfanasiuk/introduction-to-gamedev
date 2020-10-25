@@ -1,11 +1,13 @@
 import readline from 'readline';
 import {Game} from "./models/game";
 import {Player} from "./models/player";
-import {FieldDiskEnum} from "./enums/field-disk.enum";
+import {ColorsEnum} from "./enums/colors.enum";
 import {Robot} from "./models/robot";
 import {Board} from "./models/board";
 import {GameTypeEnum} from "./enums/game-type.enum";
 import fs from 'fs';
+import {PossibleMovesFinder} from "./models/possibleMovesFinder";
+import {Position} from "./models/position";
 
 let timeout;
 
@@ -14,14 +16,17 @@ const readLineInterface = readline.createInterface({
   output: process.stdout,
 });
 
-let blackHole: number[];
+let blackHole: Position;
 let botColor = '';
 let game: Game;
+
+const wMoves = [];
+const bMoves = [];
 
 const onReadFirstTwoLine = (line) => {
   if (!blackHole) {
     const [y, x] = line.split('');
-    return blackHole = [x - 1, yNamesRevers[y]];
+    return blackHole = new Position(x - 1, yNamesRevers[y]);
   }
 
   if (!botColor) {
@@ -45,57 +50,100 @@ const yNamesRevers = {
 };
 
 const makeBotMove = () => {
-  const move = game.getCurrentPlayer()
-    .makeDecision(
-      game.getBoard()
-        .getAvailableMoves(
-          game.
-          getCurrentPlayer()
-            .getDiscColor()
-        )
-    );
+  try {
+    const possibleMovesFinder = new PossibleMovesFinder();
 
-  if (!move.length) {
-    console.log('pass')
-  } else {
-    const [ x, y ] = move;
+    const move: Position = game.getCurrentPlayer()
+      .makeDecision(
+        possibleMovesFinder
+          .getPossibleMoves(
+            game.getBoard(),
+            blackHole,
+            game.getCurrentPlayer().getDiscColor()
+          )
 
-    game.makeMove(x, y);
+        // game.getBoard()
+        //   .getAvailableMoves(
+        //     game
+        //       .getCurrentPlayer()
+        //       .getDiscColor()
+        //   )
+      );
 
-    console.log(yNames[y] + [x + 1])
+    // const move = game.makeSmartDecision(game.getCurrentPlayer());
+
+    if (!move) {
+      (botColor === 'black' ? bMoves: wMoves).push(new Position(-1, -1));
+      console.log('pass')
+      fs.writeFileSync('./possibleMoves.txt', JSON.stringify(
+        possibleMovesFinder
+          .getPossibleMoves(
+            game.getBoard(),
+            blackHole,
+            game.getCurrentPlayer().getDiscColor()
+          ),
+        null,
+        2
+      ))
+    } else {
+      const cell = game.makeMove(move);
+
+      if (cell) {
+        (botColor === 'black' ? bMoves: wMoves).push(move);
+        console.log(cell.positionToString())
+      }
+
+
+    }
+  } catch (e) {
+    fs.writeFileSync('./error.txt', e)
+    console.log(e)
   }
 };
 
 const moveListener = (line) => {
-  clearTimeout(timeout);
+  try {
+    clearTimeout(timeout);
 
-  const [y, x] = line.split('');
+    const [y, x] = line.split('');
 
-  game.makeMove(x - 1, yNamesRevers[y]);
+    game.makeMove(
+      line === 'pass' ? null :
+      new Position(x - 1, yNamesRevers[y])
+    );
+    (botColor !== 'black' ? bMoves: wMoves).push({x: x - 1, y: yNamesRevers[y]});
 
-  makeBotMove();
+    makeBotMove();
 
-  timeout = setTimeout(() => {
-    let rStrings = '  | ';
+    timeout = setTimeout(() => {
+      let rStrings = '  | ';
 
-    yNames.forEach((item) => {
-      rStrings += item + ' | '
-    });
+      yNames.forEach((item) => {
+        rStrings += item + ' | '
+      });
 
-    rStrings += '\n'
-
-    game.getBoard().getField().forEach((row, index) => {
-      rStrings += index + 1  + ' | ';
-      row.forEach(item => {
-        rStrings += (item || 0) + ' | '
-      })
       rStrings += '\n'
-    });
 
-    fs.writeFileSync('./r.txt', rStrings);
-    console.log(JSON.stringify(game.getBoard().field));
-    process.exit(0)
-  }, 3000)
+      game.getBoard().getField().forEach((row, index) => {
+        rStrings += index + 1  + ' | ';
+        row.forEach(item => {
+          rStrings += (item ||  ' ') + ' | '
+        })
+        rStrings += '\n'
+      });
+
+      fs.writeFileSync('./r.txt', JSON.stringify({bMoves, wMoves, blackHole}));
+      fs.writeFileSync('./r1.txt',
+        JSON.stringify(game.getBoard().field.map(r => r.map(c => c.toString())), null, 2)
+      );
+
+      process.exit(0)
+    }, 3000)
+  } catch (e) {
+    fs.writeFileSync('./error.txt', e)
+
+    console.log(e)
+  }
 };
 
 const startGame = () => {
@@ -106,8 +154,8 @@ const startGame = () => {
 
   game = new Game(
     [
-      new Player('Tester', botColor === 'white' ? FieldDiskEnum.BLACK : FieldDiskEnum.WHITE),
-      new Robot(botColor === 'white' ? FieldDiskEnum.WHITE : FieldDiskEnum.BLACK),
+      new Player('Tester', botColor === 'white' ? ColorsEnum.BLACK : ColorsEnum.WHITE),
+      new Robot(botColor === 'white' ? ColorsEnum.WHITE : ColorsEnum.BLACK),
     ],
     new Board(blackHole),
     GameTypeEnum.PLAYER_WITH_BOT,
