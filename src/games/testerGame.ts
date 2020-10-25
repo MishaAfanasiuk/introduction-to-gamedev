@@ -40,17 +40,18 @@ export class TesterGame {
     const {game, blackHole} = this;
 
     try {
-      const possibleMovesFinder = new PossibleMovesFinder();
 
-      const move: Position = game.getCurrentPlayer()
-        .makeDecision(
-          possibleMovesFinder
-            .getPossibleMoves(
-              game.getBoard(),
-              blackHole,
-              game.getCurrentPlayer().getDiscColor()
-            )
-        );
+      const move: Position = game.makeSmartDecision(game.getCurrentPlayer());
+
+        // game.getCurrentPlayer()
+        // .makeDecision(
+        //   possibleMovesFinder
+        //     .getPossibleMoves(
+        //       game.getBoard(),
+        //       blackHole,
+        //       game.getCurrentPlayer().getDiscColor()
+        //     )
+        // );
 
       if (!move) {
         console.log('pass')

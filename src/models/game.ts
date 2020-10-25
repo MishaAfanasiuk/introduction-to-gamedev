@@ -4,7 +4,15 @@ import {GameTypeEnum} from "../enums/game-type.enum";
 import {Position} from "./position";
 import {Cell} from "./cell";
 import {Robot} from "./robot";
+import {ColorsEnum} from "../enums/colors.enum";
+import {PossibleMovesFinder} from "./possibleMovesFinder";
 
+
+type moc = {
+  color: ColorsEnum,
+  score: number,
+  won: boolean,
+}
 type PlayersType = [Player, Player];
 
 export class Game {
@@ -109,16 +117,23 @@ export class Game {
       moveNumber = 0,
       bestScore = 0,
       boardCopy = new Board(this.board.getBlackHole()),
-      possibleMoves = this.board.getAvailableMoves(bot.getDiscColor()),
+      // possibleMoves = this.board.getAvailableMoves(bot.getDiscColor()),
+      possibleMovesFinder = new PossibleMovesFinder(),
+      possibleMoves = possibleMovesFinder
+      .getPossibleMoves(
+        boardCopy,
+        boardCopy.getBlackHole(),
+        bot.getDiscColor()
+      ),
       cycleRepeat = 0;
     boardCopy.field = this.board.field.map(x => x.slice());
     let robot = {score: bot.getScore(), color: bot.getDiscColor(), won: false};
     let enemy = {score: opponent.getScore(), color: opponent.getDiscColor(), won: false};
 
     possibleMoves.forEach((move, index) => {
-      boardCopy.makeMove(move[0], move[1], robot.color);
+      boardCopy.makeMove(move, robot.color);
       // console.log('a');
-      let scores = this.countPlayersScoresMM(boardCopy);
+      let scores = this.countPlayersScoresMM(boardCopy, bot, opponent);
       robot.score = scores[1];
       enemy.score = scores[0];
       let score = this.minimax(boardCopy, 0, true, robot, enemy, cycleRepeat);
@@ -134,20 +149,20 @@ export class Game {
   };
 
   minimax(board : Board, depth : number, robot_turn : boolean, bot: moc, opponent: moc, cycleRepeat: number ) {
-    console.log('im in');
-    console.log(bot.score);
-    console.log(opponent.score);
+    // console.log('im in');
+    // console.log(bot.score);
+    // console.log(opponent.score);
     let bestScore: number;
 
-    if (cycleRepeat >1 || depth > 2) {
+    if (cycleRepeat >1 || depth > 1) {
       // bot.score > opponent.score ? bot.won = true : opponent.won = true;
       // console.log('bot.won ' + bot.won)
       if (bot.score > opponent.score) {
-        console.log('boooooooooot');
-        return  1000
+        // console.log('boooooooooot');
+        return  -1000
       } else if (bot.score < opponent.score) {
-        console.log('niiiiiiiiht');
-        return -1000
+        // console.log('niiiiiiiiht');
+        return 1000
       } else {
         return 0
       }
@@ -156,12 +171,13 @@ export class Game {
 
     if(robot_turn) {
       // let moves = board.getAvailableMoves(bot.color);
-      let moves = ossibleMovesFinder
+      const possibleMovesFinder = new PossibleMovesFinder();
+      let moves = possibleMovesFinder
         .getPossibleMoves(
-          game.getBoard(),
-          blackHole,
-          game.getCurrentPlayer().getDiscColor()
-        )
+          board,
+          board.getBlackHole(),
+          bot.color
+        );
       bestScore = 0;
       let boardCopy = new Board(this.board.getBlackHole());
       boardCopy.field = board.field.map(x => x.slice());
@@ -170,7 +186,7 @@ export class Game {
         moves.forEach((move) => {
           // console.log(moves);
           // console.log(move);
-          boardCopy.makeMove(move[0], move[1], bot.color);
+          boardCopy.makeMove(move, bot.color);
           // console.log('a');
           let scores = this.countPlayersScoresMM(boardCopy, bot, opponent);
           bot.score = scores[1];
@@ -191,7 +207,15 @@ export class Game {
       }
 
     } else {
-      let moves = board.getAvailableMoves(opponent.color)
+      // let moves = board.getAvailableMoves(opponent.color)
+
+      const possibleMovesFinder = new PossibleMovesFinder();
+      let moves = possibleMovesFinder
+        .getPossibleMoves(
+          board,
+          board.getBlackHole(),
+          bot.color
+        );
       bestScore = 100;
       let boardCopy = new Board(this.board.getBlackHole());
       boardCopy.field = board.field.map(x => x.slice());
@@ -200,7 +224,7 @@ export class Game {
         moves.forEach((move) => {
           // console.log(moves)
           // console.log(move)
-          boardCopy.makeMove(move[0], move[1], opponent.color);
+          boardCopy.makeMove(move, opponent.color);
           // console.log('b');
           let scores = this.countPlayersScoresMM(boardCopy, bot, opponent);
           bot.score = scores[1];
@@ -213,8 +237,8 @@ export class Game {
           boardCopy.field = board.field.map(x => x.slice());
         });
       } else {
-        cycleRepeat += 1
-        console.log('baam');
+        cycleRepeat += 1;
+        // console.log('baam');
         let score = this.minimax(boardCopy, depth + 1, true, bot, opponent, cycleRepeat);
         if( score < bestScore ) {
           bestScore = score;

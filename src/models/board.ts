@@ -46,6 +46,7 @@ export class Board {
 
   makeMove(position: Position, disc: ColorsEnum): Position | null {
     const { x, y } = position;
+    // console.log(x);
     this.field[x][y].color = disc;
 
     const streaks = new StreakFinder().getStreaksForColor(
