@@ -8,8 +8,10 @@ import {Robot} from "../models/robot";
 import {Board} from "../models/board";
 import {GameTypeEnum} from "../enums/game-type.enum";
 import {PossibleMovesFinder} from "../models/possibleMovesFinder";
+import {MonteCarloTreeSearch} from "../algorithms/montecarlo";
 
 export class TesterGame {
+  montecarloSearch = new MonteCarloTreeSearch();
   timeout;
   blackHole: Position;
   botColor = '';
@@ -37,20 +39,12 @@ export class TesterGame {
   };
 
   makeBotMove = () => {
-    const {game, blackHole} = this;
+    const { game } = this;
 
     try {
       const possibleMovesFinder = new PossibleMovesFinder();
 
-      const move: Position = game.getCurrentPlayer()
-        .makeDecision(
-          possibleMovesFinder
-            .getPossibleMoves(
-              game.getBoard(),
-              blackHole,
-              game.getCurrentPlayer().getDiscColor()
-            )
-        );
+      const move: Position = this.montecarloSearch.findNextMove(game, game.getCurrentPlayer());
 
       if (!move) {
         console.log('pass')
@@ -90,10 +84,13 @@ export class TesterGame {
   startGame = () => {
     this.timeout = this.setExitTimeOut();
 
+    const robotColor = this.botColor === 'white' ? ColorsEnum.WHITE : ColorsEnum.BLACK;
+    const playerClor = this.botColor === 'white' ? ColorsEnum.BLACK : ColorsEnum.WHITE;
+
     this.game = new Game(
       [
-        new Player('Tester', this.botColor === 'white' ? ColorsEnum.BLACK : ColorsEnum.WHITE),
-        new Robot(this.botColor === 'white' ? ColorsEnum.WHITE : ColorsEnum.BLACK),
+        new Player('Tester', playerClor, 0),
+        new Robot(robotColor, 1),
       ],
       new Board(this.blackHole),
       GameTypeEnum.PLAYER_WITH_BOT,

@@ -2,11 +2,12 @@ import {ColorsEnum} from "../enums/colors.enum";
 import {Cell} from "./cell";
 import {Position} from "./position";
 import {StreakFinder} from "./possibleMovesFinder";
+import {yNames} from "../constants/coordinates";
 
 export declare type Field = Cell[][];
 
 export class Board {
-  field: Field = [];
+  private _field: Field = [];
 
   constructor(
     private blackHole: Position,
@@ -26,6 +27,25 @@ export class Board {
 
     this.field[3][3].color = ColorsEnum.WHITE;
     this.field[4][4].color = ColorsEnum.WHITE;
+  }
+
+  copy(): Board {
+    const newBoard = new Board(this.blackHole);
+    newBoard.field = this._field.map(row => (
+      row.map(cell => (
+        cell.copy()
+      ))
+    ));
+
+    return newBoard
+  }
+
+  get field(): Field {
+    return this._field;
+  }
+
+  set field(newField: Field) {
+    this._field = newField;
   }
 
   getBlackHole() {
@@ -70,5 +90,25 @@ export class Board {
     });
 
     return new Position(x, y);
+  }
+
+  toString() {
+    let rStrings = '  | ';
+
+    yNames.forEach((item) => {
+      rStrings += item + ' | '
+    });
+
+    rStrings += '\n'
+
+    this.field.forEach((row, index) => {
+      rStrings += index + 1 + ' | ';
+      row.forEach(item => {
+        rStrings += (item || ' ') + ' | '
+      });
+      rStrings += '\n'
+    });
+
+    return rStrings
   }
 }

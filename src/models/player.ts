@@ -1,5 +1,6 @@
 import {ColorsEnum} from "../enums/colors.enum";
 import {Position} from "./position";
+import {PlayerIndexType} from "../types/playerIndexType";
 
 export class Player {
   protected score: number = 2;
@@ -7,10 +8,15 @@ export class Player {
   constructor(
     private name: string,
     private discColor: ColorsEnum,
+    private index: PlayerIndexType,
   ) {}
 
   getName() {
     return this.name;
+  }
+
+  getIndex(): PlayerIndexType {
+    return this.index;
   }
 
   getDiscColor() {

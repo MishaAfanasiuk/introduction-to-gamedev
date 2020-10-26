@@ -7,10 +7,11 @@ import {getOppositeDisk} from "../helpers/getOppositeDisk";
 export class PossibleMovesFinder {
   private readonly streakFinder = new StreakFinder();
 
-  getPossibleMoves(board: Board, blackHole: Position, color): Position[] {
+  getPossibleMoves(board: Board, color): Position[] {
     const moves: Position[] = [];
     board.getAllCells().forEach(({position, isEmpty}: Cell) => {
-      if (!isEmpty || position.equeals(blackHole)) return;
+
+      if (!isEmpty || position.equeals(board.getBlackHole())) return;
 
       const streaks = this.streakFinder.getStreaksFor(position, board);
 

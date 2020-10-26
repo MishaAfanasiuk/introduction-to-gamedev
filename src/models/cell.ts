@@ -10,6 +10,16 @@ export class Cell {
     private _position: Position
   ){}
 
+  copy() {
+    const newCell = new Cell(this.position);
+
+    if (this.color !== ColorsEnum.NO_COLOR) {
+      newCell.color = this.color;
+    }
+
+    return newCell;
+  }
+
   positionToString = () => {
     return yNames[this._position.y] + [this._position.x + 1]
   };

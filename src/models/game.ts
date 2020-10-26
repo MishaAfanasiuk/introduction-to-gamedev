@@ -17,6 +17,17 @@ export class Game {
     private currentPlayerIndex: number = 0,
   ) {}
 
+  copy(): Game {
+    const newGame = new Game(
+      this.players,
+      this.board.copy(),
+      this.gameType,
+      this.currentPlayerIndex
+    );
+
+    return newGame;
+  }
+
   getGameType = () => {
     return this.gameType;
   };
@@ -35,6 +46,10 @@ export class Game {
 
   getCurrentPlayer = () => {
     return this.players[this.currentPlayerIndex];
+  };
+
+  getOpponent = (player: Player): Player => {
+    return this.players[1 - player.getIndex()];
   };
 
   private endGame() {
