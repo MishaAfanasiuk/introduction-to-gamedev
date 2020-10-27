@@ -11,6 +11,17 @@ export class Player {
     private index: PlayerIndexType,
   ) {}
 
+  copy(): Player {
+    const newPlayer = new Player(
+      this.name,
+      this.discColor,
+      this.index
+    );
+
+    newPlayer.setScore(this.score);
+    return newPlayer
+  }
+
   getName() {
     return this.name;
   }

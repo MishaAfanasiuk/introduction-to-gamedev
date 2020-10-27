@@ -3,6 +3,7 @@ import {Board} from "./board";
 import {GameTypeEnum} from "../enums/game-type.enum";
 import {Position} from "./position";
 import {Cell} from "./cell";
+import {ColorsEnum} from "../enums/colors.enum";
 
 type PlayersType = [Player, Player];
 
@@ -19,7 +20,7 @@ export class Game {
 
   copy(): Game {
     const newGame = new Game(
-      this.players,
+      <PlayersType>this.players.map(p => p.copy()),
       this.board.copy(),
       this.gameType,
       this.currentPlayerIndex
@@ -33,7 +34,7 @@ export class Game {
   };
 
   getWinner() {
-    return this.winner
+    return this.winner;
   }
 
   getPlayers() {
@@ -50,6 +51,10 @@ export class Game {
 
   getOpponent = (player: Player): Player => {
     return this.players[1 - player.getIndex()];
+  };
+
+  getPlayerByColor = (color: ColorsEnum) => {
+    return this.players.find((p) => p.getDiscColor() === color)
   };
 
   private endGame() {
@@ -86,7 +91,7 @@ export class Game {
       this.switchPlayer();
 
       if (this.passCount >= 2) {
-        this.winner = this.getCurrentPlayer();
+        this.winner = this.players[0].getScore() > this.players[1].getScore() ? this.players[0] : this.players[1]
       }
 
       return null

@@ -7,7 +7,7 @@ import {getOppositeDisk} from "../helpers/getOppositeDisk";
 export class PossibleMovesFinder {
   private readonly streakFinder = new StreakFinder();
 
-  getPossibleMoves(board: Board, color): Position[] {
+  getPossibleMoves(board: Board, color: ColorsEnum): Position[] {
     const moves: Position[] = [];
     board.getAllCells().forEach(({position, isEmpty}: Cell) => {
 

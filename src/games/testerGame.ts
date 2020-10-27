@@ -8,7 +8,7 @@ import {Robot} from "../models/robot";
 import {Board} from "../models/board";
 import {GameTypeEnum} from "../enums/game-type.enum";
 import {PossibleMovesFinder} from "../models/possibleMovesFinder";
-import {MonteCarloTreeSearch} from "../algorithms/montecarlo";
+import {MonteCarloTreeSearch} from "../algorithms/montecarlo/montecarlo";
 
 export class TesterGame {
   montecarloSearch = new MonteCarloTreeSearch();
