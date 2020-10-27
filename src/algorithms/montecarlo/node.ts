@@ -57,13 +57,13 @@ export class Node {
   }
 
   getChildWithMaxScore(){
-    let maxChildValue = 0;
+    let maxChildValue = Number.MAX_SAFE_INTEGER;
     let maxChildIndex = 0;
 
     // throw this.childArray
 
     this.childArray.forEach((node: Node, index) => {
-      if (node.state.winScore > maxChildValue) {
+      if (node.state.winScore < maxChildValue) {
         maxChildValue = node.state.winScore;
         maxChildIndex = index;
       }

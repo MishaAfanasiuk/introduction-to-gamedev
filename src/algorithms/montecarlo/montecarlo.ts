@@ -25,27 +25,16 @@ export class MonteCarloTreeSearch {
     while (process.hrtime(hrstart)[1] < 5e+8) {
 
       const promisingNode = this.selectPromisingNode(rootNode);
-
       this.expandNode(promisingNode);
-
       const winner = this.simulateRandomPlay(promisingNode);
-      // throw winner
       this.backPropogation(promisingNode, winner);
     }
-
-    // console.dir(
-    //   rootNode.childArray.map(c => c.state.winScore)
-    // );
-    //
-    // throw Error;
 
     const winnerNode = rootNode.getChildWithMaxScore();
 
     if (!winnerNode) {
       return null
     }
-
-    // console.log(winnerNode.state.winScore);
 
     tree.root = winnerNode;
 
@@ -56,12 +45,8 @@ export class MonteCarloTreeSearch {
     let node = rootNode;
 
     while (node.childArray.length !== 0) {
-      // console.dir(node.childArray)
       node = UCT.findBestNodeWithUCT(node);
-      // console.log(node)
     }
-
-    // throw Error
 
     return node;
   }
@@ -77,10 +62,6 @@ export class MonteCarloTreeSearch {
 
         node.addElementToChildArray(newNode);
       });
-
-      // console.log(possibleStates.map(s => s.game.getBoard().toString()));
-      // console.log(possibleStates.map(s => s.winScore));
-      // throw Error
     }
   }
 
@@ -90,8 +71,7 @@ export class MonteCarloTreeSearch {
     while (!tempNode.state.game.getWinner()) {
       tempNode.state.randomPlay();
     }
-    // console.log(tempNode.state.game.getBoard().toString())
-    // throw 'a'
+    
     return tempNode.state.getCurrentWinner();
   }
 
