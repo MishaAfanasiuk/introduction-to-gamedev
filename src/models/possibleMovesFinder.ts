@@ -75,7 +75,6 @@ export class StreakFinder {
         streak.length > 1
         && firstPieceOppositeColor === color
         && streak.filter(c => c.isOccupied && c.color === firstPieceOppositeColor).length
-      // && streak[streak.length - 1]?.color === color
       ) {
         if (firstPieceOppositeColor === color) acc.push(streak);
         acc.push(streak)

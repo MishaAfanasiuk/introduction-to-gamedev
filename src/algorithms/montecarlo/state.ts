@@ -91,15 +91,8 @@ export class State {
       state.possibleMove = position;
 
       state.game.makeMove(position);
-      // console.log(state.game.getCurrentPlayer())
-      // console.log(currentPlayer.getIndex())
-      // console.log(currentPlayer, 'fuck')
 
       const currentStatePlayer = state.game.getPlayers()[currentPlayer.getIndex()];
-
-      // console.log(currentStatePlayer.getDiscColor(), currentStatePlayer.getScore(), '==============');
-      // throw Error
-      // state.winScore = currentStatePlayer.getScore();
 
       return state
     });
@@ -109,13 +102,8 @@ export class State {
     const playerMoves = this.possibleMovesFinder.getPossibleMoves(
       this._game.getBoard(),
       this._game.getCurrentPlayer().getDiscColor()
-      // this._game.getOpponent(this._game.getCurrentPlayer()).getDiscColor()
     );
-    // console.dir(playerMoves);
     const move = playerMoves[Math.floor(Math.random() * playerMoves.length)];
-    // console.log(move)
-    // console.log('make move');
     this.game.makeMove(move || null);
-    // console.log(this.game.getBoard().toString())
   }
 }

@@ -60,7 +60,6 @@ export class Node {
     let maxChildValue = Number.MAX_SAFE_INTEGER;
     let maxChildIndex = 0;
 
-    // throw this.childArray
 
     this.childArray.forEach((node: Node, index) => {
       if (node.state.winScore < maxChildValue) {
